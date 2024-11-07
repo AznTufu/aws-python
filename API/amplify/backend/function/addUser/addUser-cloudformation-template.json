@@ -28,9 +28,9 @@
       "Type": "String",
       "Default": "storageusersStreamArn"
     },
-    "functionaddUserName": {
+    "functionmanageEmailName": {
       "Type": "String",
-      "Default": "functionaddUserName"
+      "Default": "functionmanageEmailName"
     }
   },
   "Conditions": {
@@ -63,12 +63,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "manageEmail",
+            "addUser",
             {
               "Fn::Join": [
                 "",
                 [
-                  "manageEmail",
+                  "addUser",
                   "-",
                   {
                     "Ref": "env"
@@ -95,8 +95,8 @@
             "STORAGE_USERS_STREAMARN": {
               "Ref": "storageusersStreamArn"
             },
-            "FUNCTION_ADDUSER_NAME": {
-              "Ref": "functionaddUserName"
+            "FUNCTION_MANAGEEMAIL_NAME": {
+              "Ref": "functionmanageEmailName"
             }
           }
         },
@@ -118,12 +118,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "apiLambdaRoled4621add",
+            "apiLambdaRolea7197451",
             {
               "Fn::Join": [
                 "",
                 [
-                  "apiLambdaRoled4621add",
+                  "apiLambdaRolea7197451",
                   "-",
                   {
                     "Ref": "env"
@@ -235,7 +235,7 @@
                       },
                       ":function:",
                       {
-                        "Ref": "functionaddUserName"
+                        "Ref": "functionmanageEmailName"
                       }
                     ]
                   ]

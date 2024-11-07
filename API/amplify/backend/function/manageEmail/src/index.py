@@ -21,24 +21,35 @@ def handler(event, context):
         KeyConditionExpression=Key('email').eq(user_email)
     )
     print(res)
+
+    user_id = None
+    hash_value = None
     
     if not res['Items']:
         user_id = str(uuid.uuid4())
+        lambda_client = boto3.client('lambda', region_name='eu-west-1')
         hash_value = hashlib.sha256((user_id + user_email).encode()).hexdigest()
+        
         try:
-            table.put_item(Item={
-                    'id': user_id,
+            lambda_client.invoke(
+                FunctionName= os.environ.get('FUNCTION_ADDUSER_NAME'),
+                InvocationType='Event',
+                Payload=json.dumps({
                     'email': user_email,
+                    'user_id': user_id,
                     'hash_value': hash_value
-                }
+                })
             )
-            print("add new user")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Error invoking addUser Lambda: {e}")
+            return {
+                "statusCode": 500,
+                "body": f"Error invoking addUser Lambda: {str(e)}"
+            }
     else:
         user_id = res['Items'][0].get('id')
         hash_value = res['Items'][0].get('hash_value')
-        print("user already exists")
+        print("User already exists")
 
     return {
         "statusCode": 200,

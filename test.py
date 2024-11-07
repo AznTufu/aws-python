@@ -49,9 +49,8 @@ class TEST():
 
     def run_threads(self):
         emails = [
-            "user1@domain.com", 
-            "user2@domain.com", 
-            "user3@domain.com"
+            "user7@domain.com", 
+            "user8@domain.com", 
         ]
         
         threads_create = []

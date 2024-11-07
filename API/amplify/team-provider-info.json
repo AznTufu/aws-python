@@ -19,7 +19,11 @@
         },
         "manageEmail": {
           "deploymentBucketName": "amplify-api-dev-2c249-deployment",
-          "s3Key": "amplify-builds/manageEmail-4e7a78516e742f47706c-build.zip"
+          "s3Key": "amplify-builds/manageEmail-70544d58757442546865-build.zip"
+        },
+        "addUser": {
+          "deploymentBucketName": "amplify-api-dev-2c249-deployment",
+          "s3Key": "amplify-builds/addUser-69455a326e786d443241-build.zip"
         }
       },
       "storage": {

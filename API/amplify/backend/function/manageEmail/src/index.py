@@ -5,6 +5,18 @@ from boto3.dynamodb.conditions import Key
 import json
 import hashlib
 
+class CustomException(Exception):
+    def __init__(self, message, code):
+        super().__init__(message)
+        self.message = message
+        self.code = code
+
+    def to_dict(self):
+        return {
+            "statusCode": self.code,
+            "body": self.message
+        }
+        
 def handler(event, context):
     user_table_name = os.environ.get('STORAGE_USERS_NAME')
     dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
@@ -14,7 +26,7 @@ def handler(event, context):
     user_email = body.get('email')
     
     if not user_email:
-        return {"statusCode": 400, "body": "Missing email in the request body"}
+        raise CustomException("Missing email in the request body", 400)
 
     res = table.query(
         IndexName='emails',
@@ -42,10 +54,7 @@ def handler(event, context):
             )
         except Exception as e:
             print(f"Error invoking addUser Lambda: {e}")
-            return {
-                "statusCode": 500,
-                "body": f"Error invoking addUser Lambda: {str(e)}"
-            }
+            raise CustomException(f"Error invoking addUser Lambda: {str(e)}", 500)
     else:
         user_id = res['Items'][0].get('id')
         hash_value = res['Items'][0].get('hash_value')

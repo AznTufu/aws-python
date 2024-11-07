@@ -15,15 +15,15 @@
       "function": {
         "api418c056a": {
           "deploymentBucketName": "amplify-api-dev-2c249-deployment",
-          "s3Key": "amplify-builds/api418c056a-3341563856567139594c-build.zip"
+          "s3Key": "amplify-builds/api418c056a-6f655a573162686f6b7a-build.zip"
         },
         "manageEmail": {
           "deploymentBucketName": "amplify-api-dev-2c249-deployment",
-          "s3Key": "amplify-builds/manageEmail-70544d58757442546865-build.zip"
+          "s3Key": "amplify-builds/manageEmail-6b52493370517a6f7a33-build.zip"
         },
         "addUser": {
           "deploymentBucketName": "amplify-api-dev-2c249-deployment",
-          "s3Key": "amplify-builds/addUser-69455a326e786d443241-build.zip"
+          "s3Key": "amplify-builds/addUser-6b437542616255374453-build.zip"
         }
       },
       "storage": {

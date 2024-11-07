@@ -1,8 +1,18 @@
 import os
 import boto3
-import hashlib
-import json
 
+class CustomException(Exception):
+    def __init__(self, message, code):
+        super().__init__(message)
+        self.message = message
+        self.code = code
+
+    def to_dict(self):
+        return {
+            "statusCode": self.code,
+            "body": self.message
+        }
+        
 def handler(event, context):
     user_table_name = os.environ.get('STORAGE_USERS_NAME')
     dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
@@ -13,10 +23,7 @@ def handler(event, context):
     hash_value = event.get('hash_value')
     
     if not user_email or not user_id:
-        return {
-            "statusCode": 400,
-            "body": "Missing user_id or email in the request body"
-        }
+        raise CustomException("Missing user_id or email in the request body", 400)
     
     try:
         table.put_item(Item={
@@ -24,14 +31,6 @@ def handler(event, context):
             'email': user_email,
             'hash_value': hash_value
         })
-        return {
-            "statusCode": 200,
-            "body": json.dumps({
-                "message": "User added successfully"
-            })
-        }
+        raise CustomException("User added successfully", 200)
     except Exception as e:
-        return {
-            "statusCode": 500,
-            "body": f"Error adding user: {str(e)}"
-        }
+        raise CustomException(f"Error adding user: {str(e)}", 500)

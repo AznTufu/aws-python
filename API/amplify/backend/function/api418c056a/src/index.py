@@ -4,6 +4,18 @@ from functools import wraps
 import os
 import boto3
 
+class CustomException(Exception):
+    def __init__(self, message, code):
+        super().__init__(message)
+        self.message = message
+        self.code = code
+
+    def to_dict(self):
+        return {
+            "statusCode": self.code,
+            "body": self.message
+        }
+        
 def exception_handler(func):
     @wraps(func)
     def wrapper(event, context):
@@ -11,7 +23,7 @@ def exception_handler(func):
         response = {}
         try:
             if not event['headers'].get('x-api-key'):
-                raise PermissionError('x-api-key is invalid')
+                raise CustomException('x-api-key is invalid', HTTPStatus.FORBIDDEN)
             res = func(event, context)
             if res:
                 response['body'] = res
@@ -31,7 +43,7 @@ def exception_handler(func):
 @exception_handler
 def handler(event, context):
     if not event.get('httpMethod') == 'GET':
-        raise ValueError('Method not allowed')
+        raise CustomException('Method not allowed', HTTPStatus.METHOD_NOT_ALLOWED)
     
     user_table_name = os.environ.get('STORAGE_USERS_NAME')
     dynamodb = boto3.resource('dynamodb', region_name='eu-west-1')
@@ -43,6 +55,6 @@ def handler(event, context):
     data = res.get('Item')
     print(data)
     if not data:
-        raise ValueError('User not found')
+        raise CustomException("User not found", HTTPStatus.NOT_FOUND)
 
     return data['email']

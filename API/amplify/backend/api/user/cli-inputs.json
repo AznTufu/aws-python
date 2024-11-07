@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/manageUser": {
+      "name": "/manageUser",
+      "lambdaFunction": "api418c056a",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/getToken": {
+      "name": "/getToken",
+      "lambdaFunction": "manageEmail",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
